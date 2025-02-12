@@ -140,7 +140,7 @@ app.get("/api/dashboard", async (req, res) => {
       console.error('MongoDB not connected');
       return res.status(500).json({ error: 'Database connection error' });
     }
-
+    console.log('MongoDB connected');
     const userId = process.env.USER_ID;
     console.log('Using USER_ID:', userId);
 
@@ -170,7 +170,9 @@ app.get("/api/dashboard", async (req, res) => {
 app.post("/api/save-card", async (req, res) => {
   try {
     const { slug } = req.body;
+    console.log('Slug:', slug);
     const item = await Props.findOne({ "fieldData.slug": slug });
+    console.log('Item found:', item);
     if (!item) {
       return res
         .status(404)
