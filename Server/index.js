@@ -14,6 +14,7 @@ const userId = process.env.USER_ID;
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
+const { default: mongoose } = require("mongoose");
 const app = express();
 
 // Security headers
