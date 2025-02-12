@@ -290,21 +290,26 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-const startServer = async () => {
+const initMongo = async () => {
   try {
-    // Wait for MongoDB connection
     await config();
-    console.log('MongoDB config loaded');
-
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
+    console.log('MongoDB Connected');
   } catch (error) {
-    console.error('Server startup error:', error);
-    process.exit(1);
+    console.error('MongoDB connection error:', error);
+    throw error;
   }
 };
 
-// Start server
-startServer();
+// Initialize MongoDB on startup
+initMongo();
+
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel
+module.exports = app;
