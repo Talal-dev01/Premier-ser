@@ -67,7 +67,6 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
-config();
 // CORS Configuration
 // Add CORS configuration BEFORE other middleware
 app.use(cors({
@@ -291,7 +290,21 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    // Wait for MongoDB connection
+    await config();
+    console.log('MongoDB config loaded');
+
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Server startup error:', error);
+    process.exit(1);
+  }
+};
+
+// Start server
+startServer();
