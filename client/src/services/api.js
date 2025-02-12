@@ -1,7 +1,12 @@
 // API service for handling backend requests
+
+const API_BASE = process.env.NODE_ENV === 'production' 
+  ? '/api'
+  : 'http://localhost:5000/api';
+
 export const fetchSavedProperties = async () => {
     try {
-      const response = await fetch('/api/dashboard');
+      const response = await fetch(`${API_BASE}/dashboard`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -14,7 +19,7 @@ export const fetchSavedProperties = async () => {
   
   export const deleteSavedProperty = async (cmsId) => {
     try {
-      const response = await fetch('/api/delete-saved-item', {
+      const response = await fetch(`${API_BASE}/delete-saved-item`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
