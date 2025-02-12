@@ -15,6 +15,7 @@ function Dashboard() {
     try {
       setLoading(true);
       const data = await fetchSavedProperties();
+      console.log('Fetched properties:', data);
       setProperties(data.items || []);
       setError(null);
     } catch (err) {
@@ -24,6 +25,8 @@ function Dashboard() {
       setLoading(false);
     }
   };
+
+  console.log('Properties:', properties);
 
   const handleDelete = async (cmsId) => {
     if (window.confirm('Are you sure you want to delete this property?')) {
