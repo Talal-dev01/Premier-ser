@@ -69,20 +69,41 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 config();
 // CORS Configuration
-const corsOptions = {
-  origin: [
-    "https://figma-to-webflow-92b852.webflow.io",
-    "http://localhost:3000",
-    "https://premier-ser.vercel.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+// Add CORS configuration BEFORE other middleware
+app.use(cors({
+  origin: function(origin, callback) {
+    const allowedOrigins = [
+      'https://figma-to-webflow-92b852.webflow.io',
+      'http://localhost:3000',
+      'https://premier-ser.vercel.app'
+    ];
+    
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('Origin blocked:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  optionsSuccessStatus: 200,
-};
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Access-Control-Allow-Origin'],
+  maxAge: 600 // 10 minutes
+}));
 
-// Apply CORS middleware
-app.use(cors(corsOptions));
+// Add preflight handler
+app.options('*', cors());
+
+// Add headers middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin);
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 
 //*********************************************************** CODE FOR WEBFLOW ************************************************************
