@@ -9,36 +9,38 @@
       "src": "package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "client/build",
-        "buildCommand": "npm run vercel-build"
+        "distDir": "client/build"
       }
     }
   ],
   "routes": [
     {
-      "src": "/manifest.json",
-      "dest": "/client/build/manifest.json",
-      "headers": {
-        "Cache-Control": "public, max-age=0, must-revalidate"
-      }
+      "src": "/static/(.*)",
+      "dest": "client/build/static/$1"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/client/build/static/$1",
-      "headers": {
-        "Cache-Control": "public, max-age=31536000, immutable"
-      }
+      "src": "^/manifest.json",
+      "dest": "client/build/manifest.json"
+    },
+    {
+      "src": "^/favicon.ico",
+      "dest": "client/build/favicon.ico"
+    },
+    {
+      "src": "^/logo192.png",
+      "dest": "client/build/logo192.png"
+    },
+    {
+      "src": "^/logo512.png",
+      "dest": "client/build/logo512.png"
     },
     {
       "src": "/api/(.*)",
-      "dest": "/Server/index.js"
-    },
-    {
-      "handle": "filesystem"
+      "dest": "Server/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/client/build/index.html"
+      "dest": "client/build/index.html"
     }
   ]
 }
