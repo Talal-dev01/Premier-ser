@@ -1,0 +1,19 @@
+{
+  "name": "premier_properties",
+  "version": "1.0.0",
+  "main": "index.js",
+ "scripts": {
+    "server": "cd Server && npm start",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "cd client && npm install && npm run build",
+    "start": "cd Server && node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
