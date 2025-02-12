@@ -294,22 +294,20 @@ const initMongo = async () => {
   try {
     await config();
     console.log('MongoDB Connected');
+    return true;
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    throw error;
+    return false;
   }
 };
 
-// Initialize MongoDB on startup
-initMongo();
-
-// For local development
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
-
-// Export for Vercel
-module.exports = app;
+// Export handler for Vercel
+module.exports = async (req, res) => {
+  // Initialize MongoDB if not connected
+  if (mongoose.connection.readyState !== 1) {
+    await initMongo();
+  }
+  
+  // Handle the request with your Express app
+  return app(req, res);
+};
