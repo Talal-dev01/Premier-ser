@@ -73,6 +73,7 @@ const corsOptions = {
   origin: [
     "https://figma-to-webflow-92b852.webflow.io",
     "http://localhost:3000",
+    "https://premier-ser.vercel.app"
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
