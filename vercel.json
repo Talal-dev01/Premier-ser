@@ -16,6 +16,20 @@
   ],
   "routes": [
     {
+      "src": "/manifest.json",
+      "dest": "/client/build/manifest.json",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate"
+      }
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/client/build/static/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/Server/index.js"
     },
