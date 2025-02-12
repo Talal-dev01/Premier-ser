@@ -1,11 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const rateLimit = require('express-rate-limit');
 const cors = require("cors");
 const { WebflowClient } = require("webflow-api");
 const accessToken = process.env.WEBFLOW_ACCESS_TOKEN;
 const Props = require("./Models/properties");
-const config = require("./config");
+const config = require("../Server/config");
 const UserSaved = require("./Models/userSaved");
 const { v4: uuidv4 } = require("uuid");
 const { json } = require("stream/consumers");
@@ -52,11 +53,17 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Rate limiting for additional security
-const rateLimit = require('express-rate-limit');
-app.use('/api/', rateLimit({
+app.set('trust proxy', 1); // Add this line before rate limit
+
+const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-}));
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  trustProxy: true // Add this
+});
+
+app.use('/api/', limiter);
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 config();
