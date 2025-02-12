@@ -122,20 +122,40 @@ const fetchItem = async (cmsIDs) => {
     return [];
   }
 };
-
+// Add this near your other routes
 app.get("/api/dashboard", async (req, res) => {
   try {
-    const user = await UserSaved.findOne({ userId: userId });
-    if (!user) {
-      return res.json({ items: [] });
+    console.log('Dashboard API called');
+    
+    // Test MongoDB connection
+    if (!mongoose.connection.readyState) {
+      console.error('MongoDB not connected');
+      return res.status(500).json({ error: 'Database connection error' });
     }
 
-    const items = await fetchItem(user.cmsId);
+    const userId = process.env.USER_ID;
+    console.log('Using USER_ID:', userId);
 
-    res.json({ items });
+    const savedItems = await UserSaved.findOne({ userId });
+    console.log('Found saved items:', savedItems);
+
+    if (!savedItems) {
+      return res.json([]); // Return empty array if no items found
+    }
+
+    const properties = await Props.find({ 
+      id: { $in: savedItems.cmsId } 
+    });
+    console.log('Found properties:', properties);
+
+    res.json(properties);
+    
   } catch (error) {
-    console.error("Error:", error);
-    res.render("Dashboard", { items: [], error: "Error fetching items" });
+    console.error('Dashboard API Error:', error);
+    res.status(500).json({ 
+      error: 'Server error', 
+      details: error.message 
+    });
   }
 });
 
