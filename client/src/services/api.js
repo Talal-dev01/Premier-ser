@@ -1,18 +1,19 @@
 // API service for handling backend requests
   
 export const fetchSavedProperties = async () => {
-    try {
-      const response = await fetch('/api/dashboard');
-      console.log('Response:', response);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching properties:', error);
-      throw error;
+  try {
+    const response = await fetch('/api/dashboard');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-  };
+    const data = await response.json();
+    console.log('API Response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching properties:', error);
+    throw error;
+  }
+};
   
   export const deleteSavedProperty = async (cmsId) => {
     try {

@@ -14,13 +14,18 @@ function Dashboard() {
   const loadProperties = async () => {
     try {
       setLoading(true);
-      const data = await fetchSavedProperties();
-      console.log('Fetched properties:', data);
-      setProperties(data.items || []);
+      const response = await fetchSavedProperties();
+      console.log('Raw response:', response);
+      
+      // Check if response is array
+      const data = Array.isArray(response) ? response : [];
+      console.log('Processed data:', data);
+      
+      setProperties(data);
       setError(null);
     } catch (err) {
+      console.error('Error details:', err);
       setError('Failed to load properties');
-      console.error('Error loading properties:', err);
     } finally {
       setLoading(false);
     }
