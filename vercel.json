@@ -19,22 +19,6 @@
       "dest": "client/build/static/$1"
     },
     {
-      "src": "^/manifest.json",
-      "dest": "client/build/manifest.json"
-    },
-    {
-      "src": "^/favicon.ico",
-      "dest": "client/build/favicon.ico"
-    },
-    {
-      "src": "^/logo192.png",
-      "dest": "client/build/logo192.png"
-    },
-    {
-      "src": "^/logo512.png",
-      "dest": "client/build/logo512.png"
-    },
-    {
       "src": "/api/(.*)",
       "dest": "Server/index.js"
     },
