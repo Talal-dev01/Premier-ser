@@ -6,41 +6,34 @@
       "use": "@vercel/node"
     },
     {
-      "src": "package.json",
+      "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "client/build"
+        "distDir": "build"
       }
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "client/build/static/$1"
-    },
-    {
-      "src": "^/manifest.json",
-      "dest": "client/build/manifest.json"
-    },
-    {
-      "src": "^/favicon.ico",
-      "dest": "client/build/favicon.ico"
-    },
-    {
-      "src": "^/logo192.png",
-      "dest": "client/build/logo192.png"
-    },
-    {
-      "src": "^/logo512.png",
-      "dest": "client/build/logo512.png"
-    },
-    {
       "src": "/api/(.*)",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
+      },
       "dest": "Server/index.js"
     },
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
-      "dest": "client/build/index.html"
+      "dest": "/client/build/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "Server/index.js": {
+      "maxDuration": 10
+    }
+  }
 }
