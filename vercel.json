@@ -30,10 +30,5 @@
       "src": "/(.*)",
       "dest": "/client/build/index.html"
     }
-  ],
-  "functions": {
-    "Server/index.js": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }
