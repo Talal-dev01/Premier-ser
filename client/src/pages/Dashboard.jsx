@@ -36,24 +36,26 @@ function Dashboard() {
   const handleDelete = async (cmsId) => {
     if (window.confirm('Are you sure you want to delete this property?')) {
       try {
-        setLoading(true);
+        // Immediately remove from UI
+        setProperties(prevProperties => 
+          prevProperties.filter(prop => prop.id !== cmsId)
+        );
+  
+        // Then handle server deletion
         const result = await deleteSavedProperty(cmsId);
-        console.log('Delete result:', result);
         
-        if (result.success) {
-          // Update local state
-          setProperties(prevProperties => 
-            prevProperties.filter(prop => prop.id !== cmsId)
-          );
-          console.log('Property removed from state');
-        } else {
-          throw new Error('Delete operation failed');
+        if (!result.success) {
+          // Revert UI if server deletion fails
+          const response = await fetchSavedProperties();
+          setProperties(response);
+          setError('Failed to delete property');
         }
       } catch (err) {
         console.error('Delete error:', err);
+        // Refresh properties from server on error
+        const response = await fetchSavedProperties();
+        setProperties(response);
         setError('Failed to delete property');
-      } finally {
-        setLoading(false);
       }
     }
   };
