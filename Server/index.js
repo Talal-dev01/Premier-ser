@@ -74,7 +74,7 @@ app.use(cors({
     const allowedOrigins = [
       'https://figma-to-webflow-92b852.webflow.io',
       'http://localhost:3000',
-      'https://premier-ser.vercel.app'
+      'https://premier-server.vercel.app'
     ];
     
     // Allow requests with no origin (like mobile apps or curl requests)
