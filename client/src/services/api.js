@@ -15,22 +15,25 @@ export const fetchSavedProperties = async () => {
   }
 };
   
-  export const deleteSavedProperty = async (cmsId) => {
-    try {
-      const response = await fetch('/api/delete-saved-item', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ cmsId }),
-      });
-      console.log(response)
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error deleting property:', error);
-      throw error;
+export const deleteSavedProperty = async (cmsId) => {
+  try {
+    const response = await fetch('/api/delete-saved-item', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ cmsId }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Delete request failed');
     }
-  };
+    
+    const data = await response.json();
+    console.log('Delete response:', data);
+    return data;
+  } catch (error) {
+    console.error('Delete error:', error);
+    throw error;
+  }
+};

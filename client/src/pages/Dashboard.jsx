@@ -36,13 +36,24 @@ function Dashboard() {
   const handleDelete = async (cmsId) => {
     if (window.confirm('Are you sure you want to delete this property?')) {
       try {
+        setLoading(true);
         const result = await deleteSavedProperty(cmsId);
-        console.log(result)
+        console.log('Delete result:', result);
+        
         if (result.success) {
-          setProperties(properties.filter(prop => prop.id !== cmsId));
+          // Update local state
+          setProperties(prevProperties => 
+            prevProperties.filter(prop => prop.id !== cmsId)
+          );
+          console.log('Property removed from state');
+        } else {
+          throw new Error('Delete operation failed');
         }
       } catch (err) {
+        console.error('Delete error:', err);
         setError('Failed to delete property');
+      } finally {
+        setLoading(false);
       }
     }
   };
