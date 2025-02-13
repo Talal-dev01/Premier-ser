@@ -21,7 +21,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('/api/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -32,25 +32,25 @@ const Signup = () => {
       const data = await response.json();
       
       if (data.success) {
-        navigate('/');
+        navigate('/login');
       } else {
-        setError(data.message || 'Login failed');
+        setError(data.message || 'Signup failed');
       }
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError('Signup failed. Please try again.');
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2>Login</h2>
+        <h2>Sign Up</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Name</label>
             <input
-              type="name"
+              type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -77,10 +77,10 @@ const Signup = () => {
               required
             />
           </div>
-          <button type="submit" className="auth-button">Login</button>
+          <button type="submit" className="auth-button">Sign Up</button>
         </form>
         <p className="auth-link">
-          Don't have an account? <Link to="/signup">Sign up</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
