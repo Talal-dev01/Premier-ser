@@ -257,7 +257,7 @@ app.post("/api/save-card", async (req, res) => {
 app.delete("/api/delete-saved-item", async (req, res) => {
   try {
     const { cmsId } = req.body;
-
+console.log(cmsId)
     // Remove cmsId from user's saved items
     await UserSaved.updateOne(
       { userId }, // Assuming userId is available
@@ -266,9 +266,10 @@ app.delete("/api/delete-saved-item", async (req, res) => {
 
     // Get updated user data
     const user = await UserSaved.findOne({ userId });
+    console.log(user)
     // Fetch updated items
     const updatedItems = await fetchItem(user.cmsId);
-
+    console.log(updatedItems)
     // Send success response with updated items
     res.json({
       success: true,

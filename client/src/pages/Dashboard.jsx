@@ -37,6 +37,7 @@ function Dashboard() {
     if (window.confirm('Are you sure you want to delete this property?')) {
       try {
         const result = await deleteSavedProperty(cmsId);
+        console.log(result)
         if (result.success) {
           setProperties(properties.filter(prop => prop.id !== cmsId));
         }
