@@ -1,34 +1,26 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "client/build",
   "builds": [
     {
       "src": "Server/index.js",
       "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "client/build"
-      }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "Server/index.js"
-    },
-    {
-      "src": "/(login|signup)",
-      "dest": "client/build/index.html"
+      "dest": "/Server/index.js"
     },
     {
       "src": "/static/(.*)",
-      "dest": "client/build/static/$1"
+      "dest": "/client/build/static/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "client/build/index.html"
+      "headers": { "cache-control": "s-maxage=0" },
+      "dest": "/client/build/index.html"
     }
   ]
 }
