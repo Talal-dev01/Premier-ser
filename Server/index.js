@@ -107,7 +107,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(handleAuthentication())
+// app.use(handleAuthentication())
 
 
 //*********************************************************** CODE FOR WEBFLOW ************************************************************
@@ -157,7 +157,7 @@ const fetchItem = async (cmsIDs) => {
   }
 };
 // Add this near your other routes
-app.get("/api/dashboard", handleAuthorization(), async (req, res) => {
+app.get("/api/dashboard", async (req, res) => {
   try {
     console.log('Dashboard API called');
     
