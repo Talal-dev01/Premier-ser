@@ -22,6 +22,7 @@
     "mongoose": "^8.10.0",
     "morgan": "^1.10.0",
     "uuid": "^11.0.5",
-    "webflow-api": "^3.1.0"
+    "webflow-api": "^3.1.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }

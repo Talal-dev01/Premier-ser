@@ -15,6 +15,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const { default: mongoose } = require("mongoose");
+const User = require("./Models/users");
 const app = express();
 
 // Security headers
@@ -284,6 +285,27 @@ console.log(cmsId)
   }
 });
 
+app.post("/api/signup", async (req, res) => {
+  try{
+
+    const { name, email, password } = req.body;
+    console.log(name, email, password);
+    await User.create({ name, email, password });
+    res.status(200).json({
+      success: true,
+      message: "User created successfully",
+    });
+  }catch(e){
+    console.error("Error creating User: ", e)
+  }
+});
+
+app.post("/api/login", async (req, res) => {
+  const { email, password } = req.body;
+  console.log(email, password);
+});
+
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
   app.get('*', (req, res) => {
@@ -308,7 +330,6 @@ module.exports = async (req, res) => {
   if (mongoose.connection.readyState !== 1) {
     await initMongo();
   }
-  
   // Handle the request with your Express app
   return app(req, res);
 };
