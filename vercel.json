@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "client/build",
   "builds": [
     {
       "src": "Server/index.js",
@@ -14,13 +12,8 @@
       "dest": "/Server/index.js"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/client/build/static/$1"
-    },
-    {
       "src": "/(.*)",
-      "headers": { "cache-control": "s-maxage=0" },
-      "dest": "/client/build/index.html"
+      "dest": "/Server/index.js"
     }
   ]
 }
