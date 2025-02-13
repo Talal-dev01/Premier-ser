@@ -16,6 +16,8 @@ const compression = require('compression');
 const morgan = require('morgan');
 const { default: mongoose } = require("mongoose");
 const User = require("./Models/users");
+const { setUser } = require("./Services/auth");
+const { handleAuthentication, handleAuthorization } = require("./Middlewares/auth");
 const app = express();
 
 // Security headers
@@ -105,6 +107,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(handleAuthentication())
+
 
 //*********************************************************** CODE FOR WEBFLOW ************************************************************
 
@@ -153,7 +157,7 @@ const fetchItem = async (cmsIDs) => {
   }
 };
 // Add this near your other routes
-app.get("/api/dashboard", async (req, res) => {
+app.get("/api/dashboard", handleAuthorization(), async (req, res) => {
   try {
     console.log('Dashboard API called');
     
@@ -286,8 +290,7 @@ console.log(cmsId)
 });
 
 app.post("/api/signup", async (req, res) => {
-  try{
-
+  try {
     const { name, email, password } = req.body;
     console.log(name, email, password);
     await User.create({ name, email, password });
@@ -295,14 +298,50 @@ app.post("/api/signup", async (req, res) => {
       success: true,
       message: "User created successfully",
     });
-  }catch(e){
-    console.error("Error creating User: ", e)
+  } catch (error) {
+    console.error("Error creating User:", error);
+    res.status(500).json({
+      success: false,
+      message: error.code === 11000 ? "Email already exists" : "Failed to create user"
+    });
   }
 });
 
 app.post("/api/login", async (req, res) => {
-  const { email, password } = req.body;
-  console.log(email, password);
+  try {
+    const { email, password } = req.body;
+    console.log(email, password);
+    const user = await User.findOne({email})
+    
+    if(!user) return res.status(400).json({
+      success: false,
+      message: "User not found",
+    });
+    
+    if(user.password !== password) return res.status(400).json({
+      success: false,
+      message: "Invalid password",
+    });
+    
+    const token = setUser(user);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+
+    res.json({
+      success: true,
+      message: "Login successful"
+    });
+    
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error"
+    });
+  }
 });
 
 

@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Auth.css';
 
-const Login = () => {
+const Signup = () => {
   const [formData, setFormData] = useState({
+    name: '',
     email: '',
     password: ''
   });
@@ -86,4 +87,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
