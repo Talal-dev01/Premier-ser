@@ -18,6 +18,7 @@ const { default: mongoose } = require("mongoose");
 const User = require("./Models/users");
 const { setUser } = require("./Services/auth");
 const { handleAuthentication, handleAuthorization } = require("./Middlewares/auth");
+const cookieParser = require("cookie-parser");
 const app = express();
 
 // Security headers
