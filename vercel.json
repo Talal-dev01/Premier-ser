@@ -14,13 +14,13 @@
     }
   ],
   "rewrites": [
-    {
+    { 
       "source": "/api/(.*)",
       "destination": "/Server/index.js"
     },
     {
       "source": "/(.*)",
-      "destination": "/client/build/index.html"
+      "destination": "/index.html"
     }
   ]
 }

@@ -136,6 +136,8 @@ app.use((req, res, next) => {
 
 // fetchSites();
 
+app.use(express.static(path.join(__dirname, '../client/build')));
+
 //*********************************************************** ^ CODE FOR WEBFLOW ^ ************************************************************
 
 //*********************************************************** CODE FOR FETCHING ITEMS ************************************************************
@@ -343,7 +345,7 @@ app.post("/api/login", async (req, res) => {
     });
   }
 });
-app.use(express.static(path.join(__dirname, '../client/build')));
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
