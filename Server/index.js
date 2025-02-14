@@ -113,7 +113,7 @@ app.use((req, res, next) => {
 });
 
 // app.use(handleAuthentication())
-
+app.use(cookieParser());
 
 //*********************************************************** CODE FOR WEBFLOW ************************************************************
 
@@ -317,7 +317,6 @@ app.post("/api/signup", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
     const user = await User.findOne({email})
     
     if(!user) return res.status(400).json({
@@ -331,16 +330,20 @@ app.post("/api/login", async (req, res) => {
     });
     
     const token = setUser(user);
-    console.log(token)
+    
+    // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
     });
 
+    // Send response
     res.json({
       success: true,
-      message: "Login successful"
+      message: "Login successful",
+      token // Also send token in response
     });
     
   } catch (error) {
