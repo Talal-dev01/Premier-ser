@@ -25,12 +25,17 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include', // Important for cookies
         body: JSON.stringify(formData)
       });
-
+  
       const data = await response.json();
       
       if (data.success) {
+        // Store token in localStorage if needed
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+        }
         navigate('/');
       } else {
         setError(data.message || 'Login failed');
