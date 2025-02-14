@@ -6,10 +6,10 @@
       "use": "@vercel/node"
     },
     {
-      "src": "package.json",
+      "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "client/build"
+        "distDir": "build"
       }
     }
   ],
@@ -19,16 +19,20 @@
       "dest": "Server/index.js"
     },
     {
-      "src": "/(login|signup)",
-      "dest": "client/build/index.html"
+      "src": "/static/(.*)",
+      "dest": "/client/build/static/$1"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "client/build/static/$1"
+      "src": "/favicon.ico",
+      "dest": "/client/build/favicon.ico"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/client/build/manifest.json"
     },
     {
       "src": "/(.*)",
-      "dest": "client/build/index.html"
+      "dest": "/client/build/index.html"
     }
   ]
 }
